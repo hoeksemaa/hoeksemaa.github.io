@@ -6,7 +6,7 @@ description: Bookmark this to keep an eye on my project updates!
 collections:
     projects:
         output: true
-        permalink: /projects/:name/
+        permalink: /projects/:name
 
 markdown: kramdown
 theme: minima
