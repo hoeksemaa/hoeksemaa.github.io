@@ -1,7 +1,7 @@
 url: "https://hoeksemaa.github.io"
 baseurl: ""
 title: John's homepage
-description: Bookmark this to keep an eye on my project updates!
+description: Meandering
 
 collections:
     projects:
