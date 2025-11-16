@@ -6,5 +6,5 @@ title: Projects
 # My Projects
 
 {% for project in site.projects %}
-- [{{ project.title }}]({{ project.url }}) - {{ project.date | date: "%Y-%m"}}
+- [{{ project.title }}]({{ project.url }}) - {{ project.date | date: "%Y %B"}}
 {% endfor %}
