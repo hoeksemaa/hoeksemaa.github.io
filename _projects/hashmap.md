@@ -1,6 +1,6 @@
 ---
 title: hashbrowns
-date: July 2025
+date: 2025 July
 ---
 # hashbrowns
 get sizzly yo
