@@ -1,10 +1,7 @@
 ---
 layout: default
-title: About
+title: Contact
 ---
-
-# About Me
-
-I'm a 26yo engineer.
-
-Reach me at johnmarchoeksema@gmail.com
+# Feel free to reach out!
+email: [johnmarchoeksema@gmail.com](mailto:johnmarchoeksema@gmail.com) \
+github: [hoeksemaa](github.com/hoeksemaa) 
