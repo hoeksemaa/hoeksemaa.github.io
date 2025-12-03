@@ -4,10 +4,11 @@ date: 2025 June
 ---
 # Mars Trail: a text adventure!
 
+## Github
 Stored neatly on [github](https://github.com/hoeksemaa/Mars_Trail)
 
 ## Project Description
-You're headed off to Mars! The mission plan is a prudent Hohmann transfer orbit, meaning you'll arrive in a short 9 months. Make wise decisions while you're traveling to ensure you arrive in one piece.
+I was interested in pivoting to a software dev position at my current company, and they write everything in C. This project is a simple text adventure to pick back up some C syntax and use a couple other techniques too.
 
 ## Post-Mortem
 - pointers are good; use them frequently

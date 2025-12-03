@@ -3,6 +3,6 @@ layout: default
 title: Home
 ---
 
-# Hi, I'm John
+# Hi, I'm John!
 
-Welcome to my website.
+Currently working as Requirements Engineer @ Gentex and getting back into programming. Feel free to check out my projects for more details o7
