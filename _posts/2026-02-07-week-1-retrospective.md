@@ -23,11 +23,9 @@ I learned a massive volume of content this week but was slower than I could've b
 
 ## Abundance mindset
 This class is a cooperative instead of competitive environment; look for win/wins and don't stress about being "behind"; it's a gift to be with such a talented group
-- share tips/help freely
+- **share tips/help freely**
 
 ## Socialize more!
 Chatting with classmates is fun and they're really smart too. It's probably smart to intentionally carve out a bit of time each day for this.
-- 12:30-1pm block seems good for food and walks
-- Try to talk to everyone; don't form cliques
-
-## The hivemind cometh?
+- **12:30-1pm block seems good for food and walks**
+- **Try to talk to everyone; don't form cliques**
