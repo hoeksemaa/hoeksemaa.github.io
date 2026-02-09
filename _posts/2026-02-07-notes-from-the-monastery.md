@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Week 1 retrospective
+title: Notes on Claude from the Monastery`
 date: 2026-02-07
 ---
 
