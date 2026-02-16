@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Notes on Claude from the Monastery`
+title: Notes on Claude from the Monastery
 date: 2026-02-07
 ---
 
