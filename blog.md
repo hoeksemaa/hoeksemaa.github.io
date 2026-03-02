@@ -3,7 +3,7 @@ layout: default
 title: Blog
 ---
 
-# A Few Thoughts...
+# John's slice of the Blogosphere
 
 {% for post in site.posts %}
 - [{{ post.title }}]({{ post.url }}) - {{ post.date | date: "%Y %B %d"}}
