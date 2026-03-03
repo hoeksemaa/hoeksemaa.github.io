@@ -252,8 +252,8 @@ a:focus-visible {
 
 /* ─── Profile Photo ────────────────────────────────────── */
 .profile-photo {
-    width: 400px;
-    height: 400px;
+    width: 300px;
+    height: 300px;
     border-radius: 2px;
     object-fit: cover;
     display: block;
