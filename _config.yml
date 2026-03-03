@@ -8,5 +8,12 @@ collections:
         output: true
         permalink: /projects/:name
 
+defaults:
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "default"
+
 markdown: kramdown
 theme: minima

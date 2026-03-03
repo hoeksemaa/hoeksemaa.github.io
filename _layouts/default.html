@@ -1,15 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} — John Hoeksema</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
-    <nav>
-        <a href="/">Home</a> |
-        <a href="/projects">Projects</a> |
-        <a href="/blog">Blog</a> |
-        <a href="/contact">Contact</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+
+    <nav class="sidebar">
+        <label for="nav-toggle" class="nav-hamburger" aria-label="Toggle navigation">
+            <i class="ph-bold ph-list"></i>
+        </label>
+
+        <a href="/" class="nav-item{% if page.url == '/' %} active{% endif %}">
+            <i class="ph-bold ph-house"></i>
+            <span class="nav-label">HOME</span>
+        </a>
+        <a href="/projects" class="nav-item{% if page.url contains 'projects' %} active{% endif %}">
+            <i class="ph-bold ph-folder"></i>
+            <span class="nav-label">PROJECTS</span>
+        </a>
+        <a href="/blog" class="nav-item{% if page.url contains 'blog' %} active{% endif %}">
+            <i class="ph-bold ph-article"></i>
+            <span class="nav-label">BLOG</span>
+        </a>
+        <a href="/contact" class="nav-item{% if page.url contains 'contact' %} active{% endif %}">
+            <i class="ph-bold ph-envelope"></i>
+            <span class="nav-label">CONTACT</span>
+        </a>
     </nav>
-    {{ content }}
+
+    <main class="content">
+        {{ content }}
+    </main>
 </body>
 </html>
