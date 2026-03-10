@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-<body>
+<body class="{% if page.url == '/' %}page-home{% endif %}">
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
 
     <nav class="sidebar">
