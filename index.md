@@ -9,7 +9,7 @@ title: Home
 
 ![Yosemite](/assets/images/yosemite.jpg){: .profile-photo}
 
-I'm currently a Resident Engineer @ [Fractal Bootcamp](https://fractalbootcamp.com/), previously @ Gentex and Accenture. Feel free to check out my projects!
+I'm currently a Resident Engineer @ [Fractal Bootcamp](https://fractalbootcamp.com/). I want to work on BCIs to improve humanity's access to their own brains.
 
 </div>
 
