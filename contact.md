@@ -18,3 +18,7 @@ title: Contact
 **twitter:**
 [https://x.com/a_leify_boi](https://x.com/a_leify_boi)
 {: .contact-method}
+
+**resume:**
+[Hoeksema-Resume.pdf](/assets/Hoeksema-Resume.pdf)
+{: .contact-method}

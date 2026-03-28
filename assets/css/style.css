@@ -298,6 +298,12 @@ pre code {
     color: #F0F0F0;
 }
 
+/* ─── Images ───────────────────────────────────────────── */
+.content img {
+    max-width: 100%;
+    height: auto;
+}
+
 /* ─── Post Page ─────────────────────────────────────────── */
 .post-header {
     margin-bottom: 32px;
