@@ -3,14 +3,18 @@ layout: default
 title: Contact
 ---
 # Feel free to reach out!
-**email**
+**email:**
 [johnmarchoeksema@gmail.com](mailto:johnmarchoeksema@gmail.com)
 {: .contact-method}
 
-**github**
+**github:**
 [github.com/hoeksemaa](https://github.com/hoeksemaa)
 {: .contact-method}
 
-**linkedin**
+**linkedin:**
 [linkedin.com/in/johnhoeksema](https://www.linkedin.com/in/johnhoeksema/)
+{: .contact-method}
+
+**twitter:**
+[https://x.com/a_leify_boi](https://x.com/a_leify_boi)
 {: .contact-method}
