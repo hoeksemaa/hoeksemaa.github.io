@@ -9,7 +9,7 @@ title: Home
 
 ![Yosemite](/assets/images/yosemite.jpg){: .profile-photo}
 
-I'm currently a Resident Engineer @ [Fractal Bootcamp](https://fractalbootcamp.com/). I want to work on BCIs to improve humanity's access to their own brains.
+I'm currently a Resident Engineer @ [Fractal Accelerator](https://fractalbootcamp.com/). I want to work on BCIs to improve humanity's access to their own brains.
 
 </div>
 

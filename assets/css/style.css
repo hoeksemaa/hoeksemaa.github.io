@@ -253,7 +253,8 @@ a:focus-visible {
 /* ─── Profile Photo ────────────────────────────────────── */
 .profile-photo {
     width: 450px;
-    height: 450px;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     object-fit: cover;
     display: block;
@@ -373,7 +374,6 @@ blockquote p:last-child {
 
     .profile-photo {
         width: clamp(288px, 60vw, 360px);
-        height: clamp(288px, 60vw, 360px);
     }
 
     .home-centered {
