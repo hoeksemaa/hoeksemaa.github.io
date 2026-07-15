@@ -7,11 +7,19 @@ collections:
     projects:
         output: true
         permalink: /projects/:name
+    brainpong:
+        output: true
+        permalink: /brainpong/:name
 
 defaults:
   - scope:
       path: ""
       type: "projects"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "brainpong"
     values:
       layout: "default"
 
