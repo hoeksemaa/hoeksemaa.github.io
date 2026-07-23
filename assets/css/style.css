@@ -340,6 +340,25 @@ blockquote p:last-child {
     margin-bottom: 0;
 }
 
+/* ─── Blue Box Explainer ──────────────────────────────────── */
+.blue-box {
+    background: #10222B;
+    border: 1px solid #00D4FF;
+    border-radius: 2px;
+    padding: 16px 20px;
+    margin: 24px 0;
+}
+
+.blue-box > *:last-child {
+    margin-bottom: 0;
+}
+
+.blue-box-title {
+    color: #00D4FF;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
 /* ─── Contact Methods ─────────────────────────────────────── */
 .contact-method {
     margin-bottom: 24px;

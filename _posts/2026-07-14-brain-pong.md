@@ -14,6 +14,11 @@ the project started out from humble origins: an SSVEP script and a headband hold
 
 i explored other ideas and settled on EOG tech. with 2 electrodes recording the eyes, i could record a simple single dimension of motion while proving i can make something fun with the tech at all. this also forced me to learn things like cleaning skin for electrode contact. i had a working demo i believe within the first month!
 
+<div class="blue-box" markdown="1">
+<span class="blue-box-title">what is EOG?</span>
+electrooculography (EOG) measures the tiny voltage between the front and back of your eyeball, which acts like a small battery — positive at the cornea, negative at the retina. when your eyes rotate, that dipole swings past electrodes placed beside them, producing a signal that tracks gaze direction. it's cheap, fast, and far less fussy than reading the brain directly, which made it the perfect way to get pong on screen with just two electrodes.
+</div>
+
 ## valley of pain
 
 i tried to improve the design and ended up making it worse. i didn’t like having an electrical ground as one of the electrodes, as i thought it was unnecessary. i removed it, modified the firmware to compensate, and likely messed up the electrode inputs to the bias as well. this took ~2 weeks to revert. i had no clue what was going wrong, as the data i was getting was garbage. i ended up rescheduling the brain pong tournament twice. As the first date passed, even a single board wasn’t producing good data. finally i corrected the firmware and started getting real data from the board.
