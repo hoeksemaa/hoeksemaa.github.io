@@ -111,7 +111,7 @@ body {
 
 /* ─── Content Area ─────────────────────────────────────── */
 .content {
-    max-width: 50vw;
+    max-width: 640px;
     width: 100%;
     margin: 0 auto;
     padding: 32px;
