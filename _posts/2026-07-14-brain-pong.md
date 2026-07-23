@@ -38,3 +38,5 @@ my next project will likely be an EEG mouse. this will do two important things. 
 ## why?
 
 I’ve been fascinated by BCIs for a decade, quietly keeping my eye on the industry as it grows. In the past couple months, i decided to try hard for a job in the industry. in the short term, there’s a wealth of serious medical problems to solve. we can make life significantly better for a chunk of humanity and shouldn’t pass up this chance. in the long term, i’m excited for the beautiful and wild possibilities that unlock when we have much better control of reading/writing to a significant number of neurons in the brain. we can make life so much better for humanity. excelsior!
+
+![A whaler standing on deck, harpoon in hand, facing the enormous eye of a whale.](/assets/images/brain-pong-whale-eye.jpg)
