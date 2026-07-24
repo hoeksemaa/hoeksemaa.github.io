@@ -40,3 +40,10 @@ my next project will likely be an EEG mouse. this will do two important things. 
 I’ve been fascinated by BCIs for a decade, quietly keeping my eye on the industry as it grows. In the past couple months, i decided to try hard for a job in the industry. in the short term, there’s a wealth of serious medical problems to solve. we can make life significantly better for a chunk of humanity and shouldn’t pass up this chance. in the long term, i’m excited for the beautiful and wild possibilities that unlock when we have much better control of reading/writing to a significant number of neurons in the brain. we can make life so much better for humanity. excelsior!
 
 ![A whaler standing on deck, harpoon in hand, facing the enormous eye of a whale.](/assets/images/brain-pong-whale-eye.jpg)
+
+<div class="green-box" markdown="1">
+<span class="green-box-title">🔓 New Hardware Unlocked: Cerelog 8-channel BCI board</span>
+A Cerelog board has two primary chips: an ESP32 and an ADS1299. The ESP32 is the “brains” of the board: it has a CPU core, some memory, and integrated wifi/bluetooth. Helpful for any small hardware system. The ADS1299 is what makes this board good for BCIs. It has many useful pins, most notably 8 electrode inputs, an SRB1 input, and a bias output.
+
+[Read more here](https://www.cerelog.com/).
+</div>
