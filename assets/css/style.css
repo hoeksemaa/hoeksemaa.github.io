@@ -354,7 +354,28 @@ blockquote p:last-child {
 }
 
 .blue-box-title {
+    display: block;
     color: #00D4FF;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+/* ─── Green Box Explainer ─────────────────────────────────── */
+.green-box {
+    background: #102B22;
+    border: 1px solid #00FF88;
+    border-radius: 2px;
+    padding: 16px 20px;
+    margin: 24px 0;
+}
+
+.green-box > *:last-child {
+    margin-bottom: 0;
+}
+
+.green-box-title {
+    display: block;
+    color: #00FF88;
     font-weight: 700;
     margin-bottom: 8px;
 }
