@@ -346,7 +346,8 @@ blockquote p:last-child {
     border: 1px solid #00D4FF;
     border-radius: 2px;
     padding: 16px 20px;
-    margin: 24px 0;
+    width: 90%;
+    margin: 24px auto;
 }
 
 .blue-box > *:last-child {
@@ -366,7 +367,8 @@ blockquote p:last-child {
     border: 1px solid #00FF88;
     border-radius: 2px;
     padding: 16px 20px;
-    margin: 24px 0;
+    width: 90%;
+    margin: 24px auto;
 }
 
 .green-box > *:last-child {
