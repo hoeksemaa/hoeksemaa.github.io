@@ -305,6 +305,18 @@ pre code {
     height: auto;
 }
 
+/* ─── Video ────────────────────────────────────────────── */
+/* Height-capped like the explainer-box images, so portrait phone
+   footage doesn't run the length of the page. */
+.content video {
+    display: block;
+    max-width: 100%;
+    max-height: 70vh;
+    width: auto;
+    margin: 24px auto;
+    background: #000;
+}
+
 /* ─── Post Page ─────────────────────────────────────────── */
 .post-header {
     margin-bottom: 32px;
