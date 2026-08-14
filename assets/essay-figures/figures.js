@@ -171,6 +171,21 @@ class Plot {
     ctx.restore();
   }
 
+  /* label(), but stacked lines at a caller-chosen size. Exists for names too
+     long for the gutter at the standard 15 px — "amplitude · 0.1–30 Hz" would
+     cross x=63 into the tick labels, so figure 8.5 stacks the name over its
+     band at a size that stays clear. */
+  label2(lines, color, px) {
+    const { ctx } = this;
+    ctx.save();
+    ctx.font = px + "px " + font();
+    ctx.fillStyle = color; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+    const lh = px + 3;
+    const y0 = this.y + this.h / 2 - (lines.length - 1) * lh / 2;
+    lines.forEach((t, j) => ctx.fillText(t, 6, y0 + j * lh));
+    ctx.restore();
+  }
+
   /* A short readout in the panel's top right — which filters are on, what σ
      came out, how many cues the threshold caught. Reserved for a figure's
      actual output: a number the step produces and the next step consumes, which
@@ -1594,6 +1609,122 @@ FIGURES["fig-08"] = (mount, data) => {
   });
 };
 
+/* ── 08.5 · threshold amplitude, or threshold velocity ───────────────────── */
+
+/* Three rows off ONE poll-by-poll computation: the R − L differential, the
+ * game's filtered amplitude, and the same chain's velocity — rows 2 and 3
+ * diverge only at the final step, and each carries its own ±6σ threshold from
+ * the recording's own 5 s calibration. No control: the loop is the animation
+ * (figure 9's precedent), and the argument is the comparison itself.
+ *
+ * TWO DELIBERATE DEPARTURES from the rest of the series, both the point:
+ *
+ * - THE GAME'S CORNERS, not the essay's. The data is baked through
+ *   eog_core._eog_filter verbatim (LP 30 / HP 0.1, notch 3rd order). At the
+ *   essay's LP 100 the derivative amplifies 40-100 Hz broadband so much that
+ *   velocity LOSES on the 12-recording corpus (531/960 cued glances vs
+ *   amplitude's 708/960 at 6σ) — PR #36's own "velocity performs best at
+ *   ~35 Hz" warning, measured. At these corners: amplitude 526/960,
+ *   velocity 926/960.
+ *
+ * - NOT the committed john recording. On john both rows catch 79/80 — the one
+ *   subject in the corpus where nothing separates them. David (run #3 of the
+ *   mass collection) is the honest witness: BOTH rows draw their σ from the
+ *   same noisy opening — each lands at the 100th percentile of its own
+ *   recording's 5 s blocks (σ_amp 51.3 µV vs blockwise median 14.9; σ_vel
+ *   586.6 µV/s vs median 324) — so each detector gets the worst calibration
+ *   it could have drawn. Amplitude's 6σ (±308 µV) sits ABOVE the recording's
+ *   peak (265 µV): it cannot fire at all, 0/80 cued glances. Velocity's
+ *   slimmer margin (peaks 2.2× its 6σ) still clears: 77/80. The bake
+ *   (scripts/bake_ampvel_figure.py) carries the full numbers.
+ *
+ * Row names sit in the gutter per figures 2/3, but stacked at 10.5 px over
+ * their band (label2) — "amplitude" at the standard 15 px would cross x=63
+ * into the tick labels. Thresholds are figure 10's idiom: 1 px red rules,
+ * both signs, under the trace. */
+FIGURES["fig-085"] = (mount, data) => {
+  const av = data.ampvel;
+  if (!av) return;                       // sidecar bake not present
+  const m = av.meta, fs = m.fs, view = m.view_s, from = m.valid_from_s;
+  const DIFF = (i) => av.arrays.diff[i] + m.mean.diff;
+  const AMP = (i) => av.arrays.amp[i];
+  const VEL = (i) => av.arrays.vel[i] * m.vel_scale;
+  const THR_A = m.sigma_thr * m.sigma.amp_uv;
+  const THR_V = m.sigma_thr * m.sigma.vel_uvs;
+  const S = m.span;
+  const gpad = (span) => span * (EDGE_FADE_PX / 2) / PANEL_H;
+  const STEP_D = gridStep(S.diff, PANEL_H, gpad(S.diff), MIN_GRIDLINES);
+  const STEP_A = gridStep(S.amp, PANEL_H, gpad(S.amp), MIN_GRIDLINES);
+  const STEP_V = gridStep(S.vel, PANEL_H, gpad(S.vel), MIN_GRIDLINES);
+
+  new Figure(mount, {
+    height: TRIPLE_H,
+    control: "none",
+    aria: "the same ten seconds three ways: raw differential, filtered "
+        + "amplitude against its six-sigma threshold, and the same chain's "
+        + "velocity against its own",
+    draw: (ctx, W, H, _v, clock) => {
+      const travel = m.duration_s - from - view;
+      const t0 = from + (clock % travel);
+      const i0 = Math.max(0, Math.floor(t0 * fs) - 1);
+      const i1 = Math.min(m.n, Math.ceil((t0 + view) * fs) + 1);
+      const xr = [t0, t0 + view];
+      const y1 = PLOT_TOP;
+      const y2 = y1 + PANEL_H + PANEL_GAP;
+      const y3 = y2 + PANEL_H + PANEL_GAP;
+      const box = { x: 108, w: W - 120 };
+
+      // Row 1 centres on the window mean (figure 6/7's camera — drift dwarfs
+      // any one slice); rows 2/3 are absolute, zero is zero (figure 8's rule).
+      const ctr = winMean(DIFF, i0, i1);
+      const p1 = new Plot(ctx, { ...box, y: y1, h: PANEL_H }, xr,
+                          [ctr - S.diff / 2, ctr + S.diff / 2]);
+      p1.grid(ticksAt(ctr - S.diff / 2, ctr + S.diff / 2, STEP_D),
+              (v) => (v / 1000).toFixed(2), "mV");
+      const p2 = new Plot(ctx, { ...box, y: y2, h: PANEL_H }, xr,
+                          [-S.amp / 2, S.amp / 2]);
+      p2.grid(ticksAt(-S.amp / 2, S.amp / 2, STEP_A),
+              (v) => (v / 1000).toFixed(2), "mV");
+      const p3 = new Plot(ctx, { ...box, y: y3, h: PANEL_H }, xr,
+                          [-S.vel / 2, S.vel / 2]);
+      p3.grid(ticksAt(-S.vel / 2, S.vel / 2, STEP_V),
+              (v) => (v / 1000).toFixed(0), "mV/s");
+
+      // Cue guides span the whole stack (figure 2/3's rule); labels above the
+      // top panel only.
+      p1.cues(m.cues, y1, y3 + PANEL_H);
+
+      // Thresholds under the traces, both signs — _sustained_crossing tests
+      // |x| and reads direction off the crossing afterwards.
+      ctx.save();
+      ctx.strokeStyle = C.red; ctx.lineWidth = 1;
+      for (const [p, thr] of [[p2, THR_A], [p3, THR_V]]) {
+        for (const v of [thr, -thr]) {
+          const yy = p.py(v);
+          if (yy < p.y || yy > p.y + p.h) continue;
+          ctx.beginPath(); ctx.moveTo(p.x, yy); ctx.lineTo(p.x + p.w, yy); ctx.stroke();
+        }
+      }
+      ctx.restore();
+
+      p1.trace(DIFF, i0, i1, fs, C.ink, 1.5);
+      p2.trace(AMP, i0, i1, fs, C.red, 1.5);
+      p3.trace(VEL, i0, i1, fs, C.red, 1.5);
+
+      p1.label2(["R − L"], C.ink, 15);
+      p2.label2(["amplitude", "0.1–30 Hz"], C.red, 10.5);
+      p3.label2(["velocity", "0.1–30 Hz"], C.red, 10.5);
+
+      // σ is this figure's genuine output — the number the threshold lines
+      // are drawn from — under the same rule as figure 9's readout.
+      p2.note([[`6σ = ${THR_A.toFixed(1)} µV`, C.red]]);
+      p3.note([[`6σ = ${Math.round(THR_V)} µV/s`, C.red]]);
+
+      p3.xAxis("seconds");
+    },
+  });
+};
+
 /* ── 09 · calibrate → σ ──────────────────────────────────────────────────── */
 
 /* What `_run_eog_sm` does in CALIBRATING, and the one number the next step needs.
@@ -1845,14 +1976,32 @@ const BASE = String(window.EOG_FIG_BASE || ".").replace(/\/+$/, "");
 
 // Bump on every re-bake. The data files are fetched separately from the script,
 // so without this a re-bake silently keeps serving the previous payload.
-const DATA_V = 41;
+const DATA_V = 44;
 
 readColors();
+// Figure 8.5 draws a different recording through the game's own corners, so its
+// data is a sidecar bake (scripts/bake_ampvel_figure.py) fetched only when its
+// mount is on the page — an essay embedding figures one at a time pays for it
+// only where it appears.
+const wantAmpvel = !!document.getElementById("fig-085");
 Promise.all([
   fetch(`${BASE}/data/eog-figures.json?v=${DATA_V}`).then((r) => r.json()),
   fetch(`${BASE}/data/eog-full.bin?v=${DATA_V}`).then((r) => r.arrayBuffer()),
-]).then(([meta, buf]) => {
+  wantAmpvel
+    ? fetch(`${BASE}/data/eog-ampvel.json?v=${DATA_V}`).then((r) => r.json())
+    : Promise.resolve(null),
+  wantAmpvel
+    ? fetch(`${BASE}/data/eog-ampvel.bin?v=${DATA_V}`).then((r) => r.arrayBuffer())
+    : Promise.resolve(null),
+]).then(([meta, buf, avMeta, avBuf]) => {
   const data = new Data(meta, buf);
+  if (avMeta && avBuf) {
+    const arrays = {};
+    avMeta.layout.forEach((k, i) => {
+      arrays[k] = new Int16Array(avBuf, i * avMeta.n * 2, avMeta.n);
+    });
+    data.ampvel = { meta: avMeta, arrays };
+  }
   for (const [id, build] of Object.entries(FIGURES)) {
     const mount = document.getElementById(id);
     if (mount) build(mount, data);
