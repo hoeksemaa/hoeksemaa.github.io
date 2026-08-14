@@ -319,7 +319,7 @@ To finally put the technology to the test, I hosted a [Brain Pong tournament](ht
 
 A problem I ran into is that everything took **dramatically** longer than I had expected. This had two parts: First, I hadn’t run a dress rehearsal, so the time spent gelling and alcohol swabbing and talking with contestants ballooned to much longer than I had planned. **Ignore the golden rule of “everything always takes longer than you expect” at your own peril.** Second, I ran into a lot of technical problems, primarily noise, that I had to do my best to mitigate. This also burned time. Even though I had conducted 2-player tests before, running it on many people revealed new problems.
 
-There were some steps I took to mitigate tournament noise. Foolishly I tried again to see if an HDMI cable would work, as the center room had a nicer screen for tournaments. This failed and I switched to the sideroom display and used Screen Mirroring.
+There were some steps I took to mitigate tournament noise. Foolishly I tried again to see if an HDMI cable would work, as the center room had a nicer screen for tournaments. This failed and I switched to the side room display and used Screen Mirroring.
 
 I also electrically isolated the contestants and board and computer. I put textbooks beneath the laptop and board, and swapped the contestants’ chairs from metal stools to a wooden piano bench.
 
