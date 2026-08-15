@@ -6,9 +6,9 @@ favicon: /assets/images/brain-pong-favicon.png
 ---
 
 <script>window.EOG_FIG_BASE = "/assets/essay-figures";</script>
-<link rel="stylesheet" href="/assets/essay-figures/figures.css?v=17">
+<link rel="stylesheet" href="/assets/essay-figures/figures.css?v=18">
 
-# brain pong
+# Brain Pong
 
 <p class="essay-subtitle">play pong with your eyes!</p>
 
