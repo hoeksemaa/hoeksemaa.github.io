@@ -17,6 +17,10 @@ favicon: /assets/images/brain-pong-favicon.png
   <a class="essay-button" href="https://hoeksemaa.github.io/brain-pong/"><i class="ph-bold ph-database"></i> public data portal</a>
 </div>
 
+<figure class="essay-figure">
+  <img src="/assets/images/brain-pong-esther-hero.jpg" alt="A smiling player wearing EOG electrodes gives a thumbs up beside a competitor flashing a peace sign at the tournament table.">
+</figure>
+
 <nav class="essay-toc" markdown="1">
 <span class="essay-toc-title">table of contents</span>
 
