@@ -132,7 +132,13 @@ h1 {
     font-weight: 700;
     line-height: 1.2;
     color: #FF6200;
+    margin-top: 72px;   /* ~two blank lines above section-level headings */
     margin-bottom: 24px;
+}
+
+/* The page-title h1 keeps sitting at the top */
+h1:first-of-type {
+    margin-top: 0;
 }
 
 h2 {
@@ -140,7 +146,7 @@ h2 {
     font-weight: 700;
     line-height: 1.2;
     color: #F0F0F0;
-    margin-top: 24px;
+    margin-top: 48px;   /* ~one blank line */
     margin-bottom: 16px;
 }
 
@@ -354,7 +360,7 @@ blockquote p:last-child {
 
 /* ─── Blue Box Explainer ──────────────────────────────────── */
 .blue-box {
-    background: #10222B;
+    background: #0D3047;
     border: 1px solid #00D4FF;
     border-radius: 2px;
     padding: 16px 20px;
@@ -375,7 +381,7 @@ blockquote p:last-child {
 
 /* ─── Green Box Explainer ─────────────────────────────────── */
 .green-box {
-    background: #102B22;
+    background: #0D3D2A;
     border: 1px solid #00FF88;
     border-radius: 2px;
     padding: 16px 20px;
