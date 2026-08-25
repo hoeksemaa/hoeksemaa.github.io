@@ -500,6 +500,67 @@ blockquote p:last-child {
     text-align: center;
 }
 
+/* A captioned video keeps the figure's own spacing, not the standalone
+   video margin, so the caption sits as close as an image caption does. */
+.essay-figure video {
+    margin: 0 auto;
+}
+
+/* ─── Sourced images: hover reveals a link to where they came from ──
+   Borrowed figures carry their source instead of spending a caption line
+   on it. The wrapper shrink-wraps the image so the badge pins to the
+   picture's own corner, not the column's. */
+.img-link {
+    position: relative;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    line-height: 0;
+}
+
+.img-link-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 2px;
+    background: rgba(20, 20, 20, 0.85);
+    border: 1px solid #FF6200;
+    color: #FF6200;
+    font-size: 16px;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity 120ms, background 80ms, color 80ms;
+}
+
+.img-link:hover .img-link-badge,
+.img-link-badge:focus-visible {
+    opacity: 1;
+}
+
+.img-link-badge:hover {
+    background: #FF6200;
+    color: #141414;
+    text-decoration: none;
+}
+
+/* No hover to reveal it on a touch screen, so it just stays put. */
+@media (hover: none) {
+    .img-link-badge { opacity: 1; }
+}
+
+/* Centered display equation */
+.essay-equation {
+    text-align: center;
+    font-size: 18px;
+    margin: 24px 0;
+}
+
 /* ─── Contact Methods ─────────────────────────────────────── */
 .contact-method {
     margin-bottom: 24px;
