@@ -8,9 +8,12 @@ favicon: /assets/images/brain-pong-favicon.png
 <script>window.EOG_FIG_BASE = "/assets/essay-figures";</script>
 <link rel="stylesheet" href="/assets/essay-figures/figures.css?v=18">
 
+<header class="essay-header" markdown="1">
+
 # Brain Pong
 
 <p class="essay-subtitle">play pong with your eyes!</p>
+</header>
 
 <div class="essay-buttons">
   <a class="essay-button" href="https://hoeksemaa.github.io/brain-pong/"><i class="ph-bold ph-database"></i> public data portal</a>
@@ -478,6 +481,6 @@ Let’s build a beautiful future together ❤️
 
 # acknowledgements {#acknowledgements}
 
-Thank you to Esther, Simon, and Lily for helping review this essay. They helped correct technical details and pointed out where people outside the industry might stumble.
+Thank you to Esther, Simon, and Lily for helping review this essay. They helped correct technical details and pointed out where people outside the industry might stumble. I’m very grateful for their help.
 
 <script src="/assets/essay-figures/figures.js?v=115"></script>

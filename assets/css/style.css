@@ -411,7 +411,12 @@ blockquote p:last-child {
     margin: 0 auto;
 }
 
-/* ─── Essay: subtitle / link buttons / TOC / captioned figures ── */
+/* ─── Essay: header / subtitle / link buttons / TOC / captioned figures ── */
+/* Scoped to the essay header so the site's other h1s keep their left edge. */
+.essay-header {
+    text-align: center;
+}
+
 .essay-subtitle {
     color: #999;
     font-style: italic;
@@ -493,10 +498,13 @@ blockquote p:last-child {
     width: auto;
 }
 
+/* Captions read as an aside, not a paragraph, so they wrap at half the
+   column instead of running the full measure under the image. */
 .essay-figure figcaption {
     color: #999;
     font-size: 13px;
-    margin-top: 8px;
+    max-width: 50%;
+    margin: 8px auto 0;
     text-align: center;
 }
 
@@ -624,6 +632,12 @@ blockquote p:last-child {
 
     .home-centered h1 {
         font-size: clamp(29px, 7vw, 36px);
+    }
+
+    /* Half a phone-width column would break a caption into a ragged
+       stack, so it takes the full measure here. */
+    .essay-figure figcaption {
+        max-width: 100%;
     }
 }
 
