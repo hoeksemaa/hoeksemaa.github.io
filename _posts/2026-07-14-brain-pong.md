@@ -16,9 +16,9 @@ favicon: /assets/images/brain-pong-favicon.png
 </header>
 
 <div class="essay-buttons">
-  <a class="essay-button" href="https://hoeksemaa.github.io/brain-pong/"><i class="ph-bold ph-database"></i> public data portal</a>
-  <a class="essay-button" href="https://github.com/hoeksemaa/brain-pong"><i class="ph-bold ph-github-logo"></i> project github</a>
-  <a class="essay-button" href="https://x.com/trillionjohns/status/2078159497898381385"><i class="ph-bold ph-x-logo"></i> tournament twitter thread</a>
+  <a class="essay-button" href="https://hoeksemaa.github.io/brain-pong/"><span><i class="ph-bold ph-database"></i>public data portal</span></a>
+  <a class="essay-button" href="https://github.com/hoeksemaa/brain-pong"><span><i class="ph-bold ph-github-logo"></i>project github</span></a>
+  <a class="essay-button" href="https://x.com/trillionjohns/status/2078159497898381385"><span><i class="ph-bold ph-x-logo"></i>tournament twitter thread</span></a>
 </div>
 
 <figure class="essay-figure">
