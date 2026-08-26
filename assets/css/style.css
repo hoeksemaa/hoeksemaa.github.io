@@ -427,30 +427,37 @@ blockquote p:last-child {
 .essay-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 12px;
     margin-bottom: 32px;
 }
 
+/* Three buttons share one row on a full-width column, so the padding and
+   type are trimmed and the label is allowed to wrap onto a second line
+   instead of forcing a row break. */
 .essay-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    flex: 1 1 220px;
+    gap: 6px;
+    flex: 1 1 150px;
     min-height: 56px;
-    padding: 12px 20px;
+    padding: 12px 10px;
     background: #1A1A1A;
     border: 1px solid #FF6200;
     border-radius: 2px;
     color: #FF6200;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.05em;
+    line-height: 1.3;
+    text-align: center;
+    text-wrap: balance;
     transition: background 80ms, color 80ms;
 }
 
 .essay-button i {
-    font-size: 22px;
+    flex: none;
+    font-size: 18px;
 }
 
 .essay-button:hover {
@@ -638,6 +645,26 @@ blockquote p:last-child {
        stack, so it takes the full measure here. */
     .essay-figure figcaption {
         max-width: 100%;
+    }
+
+    /* One button per row on a phone, so each label gets the full
+       measure back at the desktop type size. */
+    .essay-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* The column axis is now vertical, so the row-layout flex-basis would
+       set a 150px height. Each button goes back to hugging its label. */
+    .essay-button {
+        flex: 0 0 auto;
+        gap: 10px;
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+
+    .essay-button i {
+        font-size: 22px;
     }
 }
 
