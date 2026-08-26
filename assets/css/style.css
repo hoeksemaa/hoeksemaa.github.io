@@ -433,15 +433,16 @@ blockquote p:last-child {
 
 /* Three buttons share one row on a full-width column, so the padding and
    type are trimmed and the label is allowed to wrap onto a second line
-   instead of forcing a row break. */
+   instead of forcing a row break. The icon and label live together in one
+   span: as separate flex items the label box would keep the full leftover
+   width and centre its lines inside it, stranding the icon out at the edge. */
 .essay-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
     flex: 1 1 150px;
     min-height: 56px;
-    padding: 12px 10px;
+    padding: 12px 8px;
     background: #1A1A1A;
     border: 1px solid #FF6200;
     border-radius: 2px;
@@ -456,8 +457,10 @@ blockquote p:last-child {
 }
 
 .essay-button i {
-    flex: none;
+    margin-right: 6px;
     font-size: 18px;
+    line-height: 1;
+    vertical-align: -3px;
 }
 
 .essay-button:hover {
@@ -658,13 +661,14 @@ blockquote p:last-child {
        set a 150px height. Each button goes back to hugging its label. */
     .essay-button {
         flex: 0 0 auto;
-        gap: 10px;
         padding: 12px 20px;
         font-size: 16px;
     }
 
     .essay-button i {
+        margin-right: 10px;
         font-size: 22px;
+        vertical-align: -4px;
     }
 }
 
