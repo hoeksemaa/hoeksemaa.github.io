@@ -16,7 +16,7 @@ title: Contact
 {: .contact-method}
 
 **twitter:**
-[https://x.com/a_leify_boi](https://x.com/a_leify_boi)
+[https://x.com/trillionjohns](https://x.com/trillionjohns)
 {: .contact-method}
 
 **resume:**
