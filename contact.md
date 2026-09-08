@@ -20,5 +20,5 @@ title: Contact
 {: .contact-method}
 
 **resume:**
-[Hook-san-maw Resume](/assets/Hoeksema-Resume.pdf)
+[Hoeksema-Resume.pdf](/assets/Hoeksema-Resume.pdf)
 {: .contact-method}
