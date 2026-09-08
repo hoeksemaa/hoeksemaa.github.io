@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Brain Pong
+tab_title: Brain Pong
 date: 2026-07-14
 favicon: /assets/images/brain-pong-favicon.png
 ---
