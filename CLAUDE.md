@@ -24,9 +24,9 @@ bundle exec jekyll build
 - **Static site generator:** Jekyll with kramdown markdown
 - **Theme:** minima
 - **Collections:** `_projects/` - each markdown file becomes a project page at `/projects/:name`
-- **Layouts:** `_layouts/default.html` - base template with nav (Home | Projects | Contact)
+- **Layouts:** `_layouts/default.html` - base template with nav (Home | Projects | Writings | Contact)
 - **Styling:** `assets/css/style.css` - custom CSS overrides
 
 ## Content Structure
 
-All content pages use YAML frontmatter. Project files in `_projects/` require `title` and `date` fields. Root pages (`index.md`, `projects.md`, `contact.md`) use `layout: default`.
+All content pages use YAML frontmatter. Project files in `_projects/` require `title` and `date` fields. Root pages (`index.md`, `projects.md`, `writings.md`, `contact.md`) use `layout: default`.
