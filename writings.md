@@ -1,9 +1,10 @@
 ---
 layout: default
-title: Blog
+title: Writings
+redirect_from: /blog
 ---
 
-# John's slice of the Blogosphere
+# Assorted writings
 
 <div class="post-list">
 {% for post in site.posts %}
