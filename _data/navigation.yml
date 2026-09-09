@@ -1,0 +1,15 @@
+# Sidebar links, in display order. This is the single place to change a
+# label, link, or icon; _layouts/default.html loops over this list.
+# icon = a Phosphor "bold" icon class name, e.g. ph-house.
+- label: HOME
+  url: /
+  icon: ph-house
+- label: PROJECTS
+  url: /projects
+  icon: ph-folder
+- label: WRITINGS
+  url: /writings
+  icon: ph-article
+- label: CONTACT
+  url: /contact
+  icon: ph-envelope

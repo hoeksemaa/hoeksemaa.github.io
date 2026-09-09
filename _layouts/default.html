@@ -19,22 +19,18 @@
             <i class="ph-bold ph-list"></i>
         </label>
 
-        <a href="/" class="nav-item{% if page.url == '/' %} active{% endif %}">
-            <i class="ph-bold ph-house"></i>
-            <span class="nav-label">HOME</span>
+        {%- for item in site.data.navigation %}
+        {%- assign active = false %}
+        {%- if item.url == '/' %}
+            {%- if page.url == '/' %}{% assign active = true %}{% endif %}
+        {%- elsif page.url contains item.url %}
+            {%- assign active = true %}
+        {%- endif %}
+        <a href="{{ item.url }}" class="nav-item{% if active %} active{% endif %}">
+            <i class="ph-bold {{ item.icon }}"></i>
+            <span class="nav-label">{{ item.label }}</span>
         </a>
-        <a href="/projects" class="nav-item{% if page.url contains 'projects' %} active{% endif %}">
-            <i class="ph-bold ph-folder"></i>
-            <span class="nav-label">PROJECTS</span>
-        </a>
-        <a href="/writings" class="nav-item{% if page.url contains 'writings' %} active{% endif %}">
-            <i class="ph-bold ph-article"></i>
-            <span class="nav-label">WRITINGS</span>
-        </a>
-        <a href="/contact" class="nav-item{% if page.url contains 'contact' %} active{% endif %}">
-            <i class="ph-bold ph-envelope"></i>
-            <span class="nav-label">CONTACT</span>
-        </a>
+        {%- endfor %}
     </nav>
 
     <main class="content">

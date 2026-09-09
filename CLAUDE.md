@@ -24,7 +24,8 @@ bundle exec jekyll build
 - **Static site generator:** Jekyll with kramdown markdown
 - **Theme:** minima
 - **Collections:** `_projects/` - each markdown file becomes a project page at `/projects/:name`
-- **Layouts:** `_layouts/default.html` - base template with nav (Home | Projects | Writings | Contact)
+- **Layouts:** `_layouts/default.html` - base template; the sidebar nav is rendered from `_data/navigation.yml`
+- **Navigation:** `_data/navigation.yml` - the single list of sidebar links (label, url, icon), in display order. Edit a label here and every page picks it up.
 - **Styling:** `assets/css/style.css` - custom CSS overrides
 
 ## Content Structure
