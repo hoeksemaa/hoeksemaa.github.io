@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>signal — hoeksemaa.github.io</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23141414'/%3E%3Ccircle cx='8' cy='8' r='4' fill='%23FF6200'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -36,7 +37,17 @@ a:hover{text-decoration:underline}
 
 /* ── shell ────────────────────────────────────────────── */
 .main{margin-left:72px;padding:12px 16px 40px;max-width:1700px}
-@media(max-width:640px){.rail{width:0;border:0;overflow:hidden}.main{margin-left:0;padding:8px}}
+/* On a phone the rail becomes a top tab bar. Collapsing it to width:0 made
+   WATCH, PEOPLE and HEALTH unreachable, because the buttons live only here. */
+@media(max-width:640px){
+  .rail{position:static;width:100%;height:auto;flex-direction:row;border-right:none;
+    border-bottom:1px solid var(--border);padding-top:0}
+  .rail-item{flex:1;min-height:46px;border-left:none;border-bottom:3px solid transparent}
+  .rail-item.active{border-left-color:transparent;border-bottom-color:var(--orange)}
+  .rail-item svg{width:18px;height:18px}
+  .main{margin-left:0;padding:8px}
+  .mapwrap{grid-template-columns:1fr}
+}
 
 .topbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:10px}
 .brand{color:var(--orange);font-weight:700;font-size:16px;letter-spacing:.06em}
@@ -220,7 +231,8 @@ function ago(ts){
   if(s<2592000) return Math.floor(s/86400)+'d ago';
   return NYT.format(new Date(ts));
 }
-function esc(v){ return v==null?'':String(v); }
+var ESCMAP={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+function esc(v){ return v==null?'':String(v).replace(/[&<>"']/g,function(c){return ESCMAP[c];}); }
 function flag(cc){
   if(!cc||cc.length!==2||cc==='XX'||cc==='T1') return '';
   return String.fromCodePoint(0x1F1E6+cc.charCodeAt(0)-65, 0x1F1E6+cc.charCodeAt(1)-65)+' ';
@@ -229,6 +241,14 @@ function vcolor(vid){
   if(!vid) return '#444';
   var h=0; for(var i=0;i<vid.length;i++) h=(h*31+vid.charCodeAt(i))>>>0;
   return 'hsl('+(h%360)+',65%,58%)';
+}
+// Resolve against the site origin and then VERIFY it. A stored path such as
+// '@evil.com/x' would otherwise concatenate into a link to another host.
+function siteUrl(p){
+  try{
+    var u=new URL(String(p||'/'), 'https://hoeksemaa.github.io');
+    return u.origin==='https://hoeksemaa.github.io' ? u.href : 'https://hoeksemaa.github.io/';
+  }catch(e){ return 'https://hoeksemaa.github.io/'; }
 }
 function place(r){
   var p = [r.city, r.region_code||r.region, r.country].filter(Boolean).join(', ');
@@ -286,7 +306,18 @@ function sizeCanvas(c){
   c.width = c.clientWidth*r; c.height = c.clientHeight*r;
   c.getContext('2d').setTransform(r,0,0,r,0,0);
 }
-function fitMap(){ view.z = cv.clientWidth; view.cx=0.5; view.cy=0.45; drawMap(); }
+var minZ = 0;
+function fitMap(){
+  // Fit the inhabited band (72N..57S) to the box's HEIGHT, and never exceed
+  // its width. The projection is square, so fitting width alone to a short
+  // box pushes most of the populated world out of view.
+  var yN=proj(0,72)[1], yS=proj(0,-57)[1];
+  var zH=cv.clientHeight/Math.max(0.01,(yS-yN));
+  view.z = Math.min(cv.clientWidth, zH);
+  minZ = view.z * 0.9;
+  view.cx=0.5; view.cy=(yN+yS)/2;
+  drawMap();
+}
 
 function drawMap(){
   var W=cv.clientWidth, H=cv.clientHeight;
@@ -381,13 +412,13 @@ cv.addEventListener('wheel', function(e){
   var r=cv.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top;
   var wx=(mx-cv.clientWidth/2)/view.z+view.cx, wy=(my-cv.clientHeight/2)/view.z+view.cy;
   var z2 = view.z * (e.deltaY<0?1.25:0.8);
-  z2 = Math.max(cv.clientWidth*0.8, Math.min(150000, z2));
+  z2 = Math.max(minZ||cv.clientWidth*0.5, Math.min(150000, z2));
   view.z=z2;
   view.cx = wx-(mx-cv.clientWidth/2)/z2; view.cy = wy-(my-cv.clientHeight/2)/z2;
   drawMap();
 }, {passive:false});
 function zoomBy(f){
-  view.z=Math.max(cv.clientWidth*0.8, Math.min(150000, view.z*f)); drawMap();
+  view.z=Math.max(minZ||cv.clientWidth*0.5, Math.min(150000, view.z*f)); drawMap();
 }
 el('zin').onclick=function(){ zoomBy(1.6); };
 el('zout').onclick=function(){ zoomBy(0.625); };
@@ -395,6 +426,22 @@ el('fit').onclick=fitMap;
 
 /* ── histogram + brush ────────────────────────────────── */
 var hc = el('hist'), hctx = hc.getContext('2d'), brush=null, brushing=false;
+// GROUP BY only emits buckets that have traffic. Re-insert the silent ones so
+// the x-axis is time-proportional and a quiet stretch reads as quiet.
+function fillGaps(b){
+  if(b.length<2) return b;
+  var out=[], k=b[0].k, byKey={}, guard=0;
+  b.forEach(function(x){ byKey[x.k]=x.c; });
+  var last=b[b.length-1].k;
+  while(guard++ < 4000){
+    out.push({k:k, c:byKey[k]||0});
+    if(k===last) break;
+    var nk=nextKey(k);
+    if(nk===k) break;
+    k=nk;
+  }
+  return out;
+}
 function drawHist(){
   var W=hc.clientWidth, H=hc.clientHeight;
   hctx.clearRect(0,0,W,H);
@@ -417,13 +464,17 @@ function bucketIdx(e){
   var r=hc.getBoundingClientRect();
   return Math.max(0, Math.min(data.hist.length-1, Math.floor((e.clientX-r.left)/(hc.clientWidth/data.hist.length))));
 }
-hc.addEventListener('mousedown', function(e){ if(!data.hist.length) return; brushing=true; brush=[bucketIdx(e),bucketIdx(e)]; drawHist(); });
+var brushHist=null;
+hc.addEventListener('mousedown', function(e){ if(!data.hist.length) return; brushing=true; brushHist=data.hist; brush=[bucketIdx(e),bucketIdx(e)]; drawHist(); });
 hc.addEventListener('mousemove', function(e){ if(brushing){ brush[1]=bucketIdx(e); drawHist(); } });
 window.addEventListener('mouseup', function(){
   if(!brushing) return;
   brushing=false;
+  var h2=brushHist||data.hist; brushHist=null;
+  if(!h2||!h2.length){ brush=null; drawHist(); return; }
   var a=Math.min(brush[0],brush[1]), b2=Math.max(brush[0],brush[1]);
-  var ka=data.hist[a].k, kb=data.hist[b2].k;
+  a=Math.min(a,h2.length-1); b2=Math.min(b2,h2.length-1);
+  var ka=h2[a].k, kb=h2[b2].k;
   state.from = nyStart(ka); state.to = nyEnd(kb); state.span=null;
   el('clearbrush').style.display='';
   document.querySelectorAll('[data-span]').forEach(function(x){ x.classList.remove('on'); });
@@ -440,7 +491,17 @@ function nyStart(k){
   var base = Date.parse((k.indexOf('T')>0?k+':00:00':k+'T00:00:00')+'Z');
   return base - nyOffsetMs(new Date(base));
 }
-function nyEnd(k){ return nyStart(k) + (k.indexOf('T')>0?3600000:86400000) - 1; }
+// Calendar arithmetic, not fixed milliseconds: Nov 1 in New York is 25 hours
+// long, so adding 86400000 would cut the last hour off the selection.
+function nextKey(k){
+  if(k.indexOf('T')>0){
+    var d=new Date(Date.parse(k+':00:00Z')); d.setUTCHours(d.getUTCHours()+1);
+    return d.toISOString().slice(0,13).replace('T','T');
+  }
+  var d2=new Date(Date.parse(k+'T00:00:00Z')); d2.setUTCDate(d2.getUTCDate()+1);
+  return d2.toISOString().slice(0,10);
+}
+function nyEnd(k){ return nyStart(nextKey(k)) - 1; }
 el('clearbrush').onclick=function(){
   brush=null; state.from=null; state.to=null; state.span=7;
   el('clearbrush').style.display='none';
@@ -499,7 +560,12 @@ el('sheet').onclick=function(e){ if(e.target===el('sheet')) el('sheet').classLis
 
 /* ── renderers ────────────────────────────────────────── */
 function renderStats(s){
-  if(!s) return;
+  if(!s || s.error || typeof s.views !== 'number'){
+    el('stats').innerHTML='';
+    el('hage').textContent = s && s.error ? 'API ERROR' : 'NO RESPONSE';
+    el('hdot').className='dot bad';
+    return;
+  }
   var items=[
     ['views', s.views, 0], ['visitors', s.visitors, 1],
     ['latest day', s.today, 0],
@@ -568,7 +634,7 @@ function renderTable(){
     // endpoint
     var p=document.createElement('td');
     var a=document.createElement('a');
-    a.href='https://hoeksemaa.github.io'+(r.path_raw||r.path); a.target='_blank'; a.rel='noreferrer';
+    a.href=siteUrl(r.path_raw||r.path); a.target='_blank'; a.rel='noreferrer';
     a.textContent=r.path;
     var f=document.createElement('span'); f.className='cell'; f.textContent=' ⋯';
     f.title='filter to this endpoint'; f.onclick=function(){ setFilter('path', r.path); };
@@ -617,6 +683,8 @@ function renderTable(){
     cl.appendChild(document.createTextNode((r.label? r.label+' · ':'')+[r.browser,r.os].filter(Boolean).join('/')));
     if(r.is_bot){ var bt=document.createElement('span'); bt.className='tag bot'; bt.style.marginLeft='4px'; bt.textContent=r.bot_name||'bot'; cl.appendChild(bt); }
     if(r.is_self){ var sf=document.createElement('span'); sf.className='tag self'; sf.style.marginLeft='4px'; sf.textContent='you'; cl.appendChild(sf); }
+    if(!r.storage_ok){ var nsx=document.createElement('span'); nsx.className='tag bot'; nsx.style.marginLeft='4px';
+      nsx.textContent='no storage'; nsx.title='This browser blocks storage, so it cannot be recognised on a return visit.'; cl.appendChild(nsx); }
     tr.appendChild(cl);
     // dwell
     tr.appendChild(td(r.ms!=null? Math.round(r.ms/1000)+'s':'—','mono'));
@@ -625,7 +693,7 @@ function renderTable(){
   t.appendChild(tb);
   w.innerHTML=''; w.appendChild(t);
   var note=document.createElement('div'); note.className='note'; note.style.marginTop='10px';
-  note.textContent='Showing '+data.rows.length+' events, newest first. Sorting a non-time column orders only this page of '+data.rows.length+'.';
+  note.textContent='Showing the first '+data.rows.length+' events for this sort and filter, out of however many match. Sorting and filtering are applied across the whole database, not just these rows.';
   w.appendChild(note);
 }
 function openVisitor(vid){
@@ -633,11 +701,15 @@ function openVisitor(vid){
   el('sheet').classList.add('on');
   el('sheetbody').innerHTML='<div class="note">loading…</div>';
   fetch(D+'/api/visitor?vid='+encodeURIComponent(vid)).then(function(r){return r.json();}).then(function(d){
+    if(!d || d.error){ el('sheetbody').innerHTML='<div class="note">Could not load this visitor.</div>'; return; }
     var v=d.visitor||{}, b=el('sheetbody');
     b.innerHTML='';
     var h=document.createElement('h2');
-    h.innerHTML='<span class="vchip" style="background:'+vcolor(vid)+'"></span>'+
-      (v.label? esc(v.label) : 'Visitor '+esc(vid).slice(0,8));
+    var hc=document.createElement('span'); hc.className='vchip'; hc.style.background=vcolor(vid);
+    h.appendChild(hc);
+    // textContent, not innerHTML: the label is written by an unauthenticated
+    // public POST and must never be parsed as markup.
+    h.appendChild(document.createTextNode(v.label || ('Visitor '+String(vid).slice(0,8))));
     b.appendChild(h);
     var meta=document.createElement('div'); meta.className='note'; meta.style.marginBottom='10px';
     meta.textContent=(v.hits||0)+' page views · first seen '+ago(v.first_seen)+' · last '+ago(v.last_seen)+
@@ -668,6 +740,8 @@ function openVisitor(vid){
       t.appendChild(tr);
     });
     b.appendChild(t);
+  }).catch(function(){
+    el('sheetbody').innerHTML='<div class="note">Could not load this visitor. The API did not respond.</div>';
   });
 }
 function renderWatch(){
@@ -710,39 +784,47 @@ function renderWatch(){
 function renderPeople(){
   // Uses the rows load() already fetched -- no extra query, no extra quota.
   var w=el('peoplewrap');
-  (function(){
-    (function(){
-      var seen={}, list=[];
-      data.rows.forEach(function(r){
-        if(!r.vid||seen[r.vid]) return;
-        seen[r.vid]=1; list.push(r);
-      });
-      w.innerHTML='';
-      if(!list.length){ w.innerHTML='<div class="empty"><b>No visitors in this range.</b></div>'; return; }
-      var t=document.createElement('table'); t.className='tbl';
-      list.forEach(function(r){
-        var tr=document.createElement('tr');
-        var c=document.createElement('td');
-        var ch=document.createElement('span'); ch.className='vchip'; ch.style.background=vcolor(r.vid);
-        c.appendChild(ch);
-        var nm=document.createElement('span'); nm.className='cell';
-        nm.textContent=r.label||('visitor '+String(r.vid).slice(0,8));
-        nm.onclick=function(){ openVisitor(r.vid); };
-        c.appendChild(nm); tr.appendChild(c);
-        tr.appendChild(td(flag(r.country)+place(r),'mono'));
-        tr.appendChild(td(r.as_org,'mono'));
-        tr.appendChild(td(r.ip,'mono'));
-        tr.appendChild(td([r.browser,r.os,r.device].filter(Boolean).join(' / '),'mono'));
-        tr.appendChild(td(ago(r.ts),'mono'));
-        t.appendChild(tr);
-      });
-      w.appendChild(t);
-      var n=document.createElement('div'); n.className='note'; n.style.marginTop='10px';
-      n.textContent='Distinct visitors seen in the last '+data.rows.length+' events. Click a name to open their full history, or to label them.';
-      w.appendChild(n);
-    });
+  var seen={}, list=[];
+  data.rows.forEach(function(r){
+    if(!r.vid||seen[r.vid]) return;
+    seen[r.vid]=1; list.push(r);
   });
+  w.innerHTML='';
+  if(!list.length){
+    var e=document.createElement('div'); e.className='empty';
+    var b2=document.createElement('b'); b2.textContent='No visitors in this range.';
+    e.appendChild(b2); w.appendChild(e); return;
+  }
+  var t=document.createElement('table'); t.className='tbl';
+  list.forEach(function(r){
+    var tr=document.createElement('tr');
+    var c=document.createElement('td');
+    var ch=document.createElement('span'); ch.className='vchip'; ch.style.background=vcolor(r.vid);
+    ch.style.cursor='pointer'; ch.onclick=function(){ openVisitor(r.vid); };
+    c.appendChild(ch);
+    var nm=document.createElement('span'); nm.className='cell';
+    nm.textContent=r.label||('visitor '+String(r.vid).slice(0,8));
+    nm.onclick=function(){ openVisitor(r.vid); };
+    c.appendChild(nm);
+    if(!r.storage_ok){
+      var ns=document.createElement('span'); ns.className='tag bot'; ns.style.marginLeft='4px';
+      ns.textContent='no storage'; ns.title='This browser blocks storage, so it looks like a new person on every visit.';
+      c.appendChild(ns);
+    }
+    tr.appendChild(c);
+    tr.appendChild(td(flag(r.country)+place(r),'mono'));
+    tr.appendChild(td(r.as_org,'mono'));
+    tr.appendChild(td(r.ip,'mono'));
+    tr.appendChild(td([r.browser,r.os,r.device].filter(Boolean).join(' / '),'mono'));
+    tr.appendChild(td(ago(r.ts),'mono'));
+    t.appendChild(tr);
+  });
+  w.appendChild(t);
+  var n=document.createElement('div'); n.className='note'; n.style.marginTop='10px';
+  n.textContent='Distinct visitors among the last '+data.rows.length+' events. Click a name to open their history, or to label them.';
+  w.appendChild(n);
 }
+
 function renderHealth(){
   var w=el('healthwrap');
   w.innerHTML='';
@@ -758,15 +840,35 @@ function renderHealth(){
   p.appendChild(note);
   var row=document.createElement('div'); row.style.marginTop='10px';
   var b1=document.createElement('button'); b1.className='btn'; b1.textContent='SEND TEST EVENT';
-  b1.onclick=function(){ b1.textContent='SENDING…';
-    fetch(D+'/api/test',{method:'POST'}).then(function(r){return r.json();}).then(function(){ b1.textContent='SENT ✓'; load(); }); };
+  b1.onclick=function(){
+    b1.textContent='SENDING…';
+    // Posts to the REAL collector, exactly as the beacon does, so this
+    // exercises the collector URL, the /s route, CORS and the D1 write.
+    // Writing straight to the database would prove none of those.
+    var collector;
+    try{ collector=new URL('/s', D).href; }catch(e){ b1.textContent='BAD URL'; return; }
+    var payload=JSON.stringify({k:'pv',e:'test',pid:'dash-'+Date.now(),sid:'dash',vid:'dashboard-test',
+      t:Date.now(),p:'/dashboard-test',h:'hoeksemaa.github.io',ti:'dashboard test event',vis:'visible'});
+    fetch(collector,{method:'POST',body:payload,headers:{'Content-Type':'text/plain'}})
+      .then(function(r){
+        if(r.status!==204){ b1.textContent='HTTP '+r.status+' ✗'; return; }
+        b1.textContent='SENT — checking…';
+        setTimeout(function(){
+          fetch(D+'/api/summary?env=test&bots=1&self=1').then(function(x){return x.json();}).then(function(d){
+            b1.textContent = (d && d.views>0) ? 'ROUND TRIP OK ✓' : 'ACCEPTED BUT NOT STORED ✗';
+            load();
+          }).catch(function(){ b1.textContent='CHECK FAILED'; });
+        }, 2500);
+      })
+      .catch(function(){ b1.textContent='COLLECTOR UNREACHABLE ✗'; });
+  };
   var b2=document.createElement('button'); b2.className='btn'; b2.textContent='DELETE TEST EVENTS'; b2.style.marginLeft='6px';
   b2.onclick=function(){ fetch(D+'/api/purge-test',{method:'POST'}).then(function(r){return r.json();}).then(function(d){ b2.textContent='DELETED '+d.deleted; load(); }); };
   row.appendChild(b1); row.appendChild(b2); p.appendChild(row);
   w.appendChild(p);
 
   fetch(D+'/api/errors').then(function(r){return r.json();}).then(function(d){
-    if(!d.errors||!d.errors.length) return;
+    if(!d||!d.errors||!d.errors.length) return;
     var e=document.createElement('div'); e.className='panel';
     e.innerHTML='<h2 style="color:#FF4444">WRITE ERRORS</h2>';
     var t=document.createElement('table'); t.className='tbl';
@@ -776,7 +878,7 @@ function renderHealth(){
       t.appendChild(tr);
     });
     e.appendChild(t); w.appendChild(e);
-  });
+  }).catch(function(){});
 
   var c=document.createElement('div'); c.className='panel';
   c.innerHTML='<h2>WHAT THESE NUMBERS CANNOT TELL YOU</h2><div class="note">'+
@@ -785,7 +887,9 @@ function renderHealth(){
     '· A visitor using a VPN shows the VPN exit location, not their own.<br>'+
     '· Some visitors with ad blockers are never recorded at all. There is no way to count them from inside this system.<br>'+
     '· A visitor is remembered by a browser ID. Clearing site data, or a different browser or device, makes the same person look new. Safari drops it after 7 quiet days.<br>'+
-    '· Link previews in iMessage, Slack and Discord do not run JavaScript, so they are not counted as visits. That is deliberate.</div>';
+    '· Most link previews (Slack, Discord, WhatsApp, Telegram, Facebook, LinkedIn) fetch the page without running JavaScript, so they never reach this tracker at all.<br>'+
+    '· Apple\'s Applebot, Googlebot and Bingbot DO run JavaScript and do arrive. They are matched by name and tagged as bots, and hidden unless you turn on BOTS.<br>'+
+    '· A page opened in a background tab, or preloaded by the browser before anyone clicked, is recorded but marked so it is not mistaken for someone reading.</div>';
   w.appendChild(c);
 }
 
@@ -828,7 +932,7 @@ function load(){
     data.rows=(r[1]&&r[1].rows)||[];
     data.places=(r[2]&&r[2].places)||[];
     data.no_geo=(r[2]&&r[2].no_geo)||0;
-    data.hist=(r[3]&&r[3].buckets)||[];
+    data.hist=fillGaps((r[3]&&r[3].buckets)||[]);
     fillFacets(r[4]);
     renderStats(data.summary);
     renderPlaces();
