@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if page.tab_title %}{{ page.tab_title }}{% else %}{{ page.title }} — John Hoeksema{% endif %}</title>
     {% if page.favicon %}<link rel="icon" type="image/png" href="{{ page.favicon }}">{% endif %}
+    {%- if page.image %}
+    <!-- Link preview (iMessage, Slack, X, ...). Set `image:` in a page's front matter to opt in. -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ page.title | escape }}">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    <meta property="og:image" content="{{ page.image | absolute_url }}">
+    <meta name="twitter:card" content="summary_large_image">
+    {%- endif %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet">
