@@ -1,6 +1,7 @@
 ---
 title: Brain Pong
 date: 2026-09-17
+image: /assets/video/brain-pong-og.jpg
 ---
 # Brain Pong
 
