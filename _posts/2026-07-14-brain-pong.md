@@ -4,6 +4,7 @@ title: Brain Pong
 tab_title: Brain Pong
 date: 2026-07-14
 favicon: /assets/images/brain-pong-favicon.png
+image: /assets/images/brain-pong-tournament-spectators.jpg
 ---
 
 <script>window.EOG_FIG_BASE = "/assets/essay-figures";</script>
