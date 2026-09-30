@@ -27,6 +27,7 @@ bundle exec jekyll build
 - **Layouts:** `_layouts/default.html` - base template; the sidebar nav is rendered from `_data/navigation.yml`
 - **Navigation:** `_data/navigation.yml` - the single list of sidebar links (label, url, icon), in display order. Edit a label here and every page picks it up.
 - **Styling:** `assets/css/style.css` - custom CSS overrides
+- **Favicon:** one brain icon for the whole site. `_layouts/default.html` links `assets/images/favicon.png` on every page. `favicon.ico` at the root covers pages without the layout, such as `back-room.html`. Pages do not set their own icon.
 
 ## Content Structure
 
