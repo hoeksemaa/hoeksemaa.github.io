@@ -33,6 +33,18 @@ bundle exec jekyll build
 
 All content pages use YAML frontmatter. Project files in `_projects/` require `title` and `date` fields. Video files in `_videos/` require `title` and `date` fields and embed a `<video>` whose file lives in `assets/video/` (mp4, H.264 + AAC, `faststart`, under GitHub's 100 MB file limit). Root pages (`index.md`, `projects.md`, `writings.md`, `videos.md`, `contact.md`) use `layout: default`.
 
+## Resume versions
+
+- `assets/Hoeksema-Resume.pdf` is always the latest resume. `contact.md` links it, and links already sent keep working.
+- The site lists only the latest resume (John's rule). Never link an old version from any page.
+- `assets/resumes/Hoeksema-Resume-X.Y.pdf` keeps every version. A new major number is a rewrite; a new minor number is an edit.
+- To publish a new version: add `assets/resumes/Hoeksema-Resume-X.Y.pdf`, copy it over `assets/Hoeksema-Resume.pdf`, and make sure the PDF's title field is `Hoeksema-Resume` (browsers show it as the tab title).
+
+| Version | Date | Notes |
+|---|---|---|
+| 1.0 | 2026-09-08 | Google Docs export, "Software Engineer" header |
+| 2.0 | 2026-11-04 | Rewrite in Parth Agrawal's layout; source in John's job-search repo (`documents/resume-2026-11/resume.html`) |
+
 ## Custom domain
 
 The site moved to https://johnhoeksema.com on 2026-09-29. John bought the domain with Cloudflare Registrar, so Cloudflare runs its DNS. `hoeksemaa.github.io`, `www`, and `http://` all redirect to `https://johnhoeksema.com`. John completed these steps:
