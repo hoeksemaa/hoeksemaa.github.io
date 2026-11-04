@@ -13,6 +13,6 @@
 - label: VIDEOS
   url: /videos
   icon: ph-video-camera
-- label: CONTACT
-  url: /contact
-  icon: ph-envelope
+- label: ABOUT
+  url: /about
+  icon: ph-user

@@ -1,6 +1,7 @@
 ---
 layout: default
-title: Contact
+title: About
+redirect_from: /contact
 ---
 # Feel free to reach out!
 **email:**
