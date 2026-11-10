@@ -45,6 +45,7 @@ All content pages use YAML frontmatter. Project files in `_projects/` require `t
 | 1.0 | 2026-09-08 | Google Docs export, "Software Engineer" header |
 | 2.0 | 2026-11-04 | Rewrite in Parth Agrawal's layout; source in John's job-search repo (`documents/resume-2026-11/resume.html`) |
 | 2.1 | 2026-11-06 | Edit of 2.0 in the same source file: "AI Engineer" at Fractal, a Cerelog role in place of the EOG project, and a "Tech Stack" section above Education |
+| 2.2 | 2026-11-10 | Edit of 2.1 in the same source file: a "Projects" section with Kowloon Walled City, no Dialect Modification bullet, each text size 1pt smaller, and 0.4in margins |
 
 ## Custom domain
 
